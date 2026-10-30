@@ -3,12 +3,11 @@ import { formatujPLN } from '../utils/numberToWordsPL';
 
 export interface FormDataState {
   miejscowosc: string;
-  dataWniosku: string; // e.g. "24.10.2025" or "24.10"
-  rokWniosku: string; // "2025"
+  dataWniosku: string; // e.g. "24.10.2025"
+  rokWniosku: string; // "2025" - master year that controls everywhere
   imieNazwisko: string;
   stanowisko: string;
-  okresMiesiecy: string; // "09 – 11.2025"
-  dochodWuwer: string; // "12500,00"
+  dochodWuwer: string; // "14250,00"
   inneZrodlaOpis: string; // np. "zlecenie", "brak"
   dochodInne: string; // "0,00"
   dochodWspolne: string; // "33 825,45"
@@ -16,19 +15,14 @@ export interface FormDataState {
   iloscOsob: number; // 4
   ogolemDochod: string; // obliczony automatycznie lub ręczny
   podpisImage: string;
-  // Sekcja pracodawcy
-  sredniDochodNaOsobePracodawca?: string;
-  wysokoscDofinansowaniaPracodawca?: string;
 }
 
 interface OfficialDocumentViewProps {
   data: FormDataState;
-  showEmployerCalculations?: boolean;
 }
 
 export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   data,
-  showEmployerCalculations = true,
 }) => {
   // Format numeric values cleanly
   const dochodWuwerFmt = data.dochodWuwer ? formatujPLN(data.dochodWuwer) : '';
@@ -36,20 +30,9 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   const dochodWspolneFmt = data.dochodWspolne ? formatujPLN(data.dochodWspolne) : '';
   const dochodOgolemFmt = data.ogolemDochod ? formatujPLN(data.ogolemDochod) : '';
 
-  // Calculate average income per person for employer box
-  const numOsob = data.iloscOsob || 1;
-  const numOgolem = parseFloat(
-    (data.ogolemDochod || '0').toString().replace(/\s+/g, '').replace(',', '.')
-  );
-  const sredniNaOsobe =
-    !isNaN(numOgolem) && numOgolem > 0
-      ? formatujPLN((numOgolem / (numOsob * 3)).toFixed(2)) // per month per person over 3 months or per period
-      : '';
-
-  // Extract day/month for "dnia ....................... 2025 r."
+  // Extract day and month for "dnia ....................... <ROK> r."
   const extractDayMonth = () => {
     if (!data.dataWniosku) return '';
-    // If format is DD.MM.YYYY, return DD.MM
     if (data.dataWniosku.includes('.')) {
       const parts = data.dataWniosku.split('.');
       if (parts.length >= 2) {
@@ -60,27 +43,28 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   };
 
   const dayMonthVal = extractDayMonth();
+  const rok = data.rokWniosku || '2025';
 
   return (
     <div
       id="printable-document"
-      className="a4-document bg-white text-black p-8 sm:p-12 md:p-14 shadow-2xl mx-auto rounded-none border border-slate-200 print:border-none print:shadow-none print:p-0 print:m-0 w-full max-w-[820px] font-serif text-[13.5px] leading-[1.65] select-text"
+      className="a4-document bg-white text-black p-8 sm:p-12 md:p-14 shadow-2xl mx-auto rounded-none border border-slate-300 print:border-none print:shadow-none print:p-0 print:m-0 w-full max-w-[820px] font-serif text-[13.5px] leading-[1.65] select-text"
       style={{ fontFamily: '"Times New Roman", Times, Georgia, serif' }}
     >
-      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data & Imię, nazwisko, stanowisko */}
-      <div className="flex justify-between items-start gap-4 mb-6">
-        {/* Lewa strona: Imię i nazwisko + Stanowisko */}
-        <div className="w-[48%] space-y-3">
-          {/* Imię i nazwisko */}
+      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data (po prawej) & Imię, nazwisko, stanowisko (po lewej z ładnym odstępem) */}
+      <div className="flex justify-between items-start gap-4 mb-6 pt-3">
+        {/* Lewa strona: Imię i nazwisko (obniżone zgodnie z prośbą) + Stanowisko */}
+        <div className="w-[48%] space-y-4 pt-5">
+          {/* Imię i nazwisko - obniżone niżej żeby ładnie i proporcjonalnie wyglądało */}
           <div className="text-center">
-            <div className="min-h-[24px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-semibold text-[14px]">
+            <div className="min-h-[26px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-semibold text-[14px]">
               {data.imieNazwisko ? (
-                <span className="text-blue-950 font-bold">{data.imieNazwisko}</span>
+                <span className="text-black font-bold tracking-wide">{data.imieNazwisko}</span>
               ) : (
                 <span className="text-transparent select-none">.</span>
               )}
             </div>
-            <div className="text-[11px] text-black mt-0.5 text-center">
+            <div className="text-[11px] text-black mt-1 text-center font-serif">
               (imię i nazwisko)
             </div>
           </div>
@@ -89,12 +73,12 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           <div className="text-center pt-1">
             <div className="min-h-[24px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-medium text-[13px]">
               {data.stanowisko ? (
-                <span className="text-slate-900">{data.stanowisko}</span>
+                <span className="text-black">{data.stanowisko}</span>
               ) : (
                 <span className="text-transparent select-none">.</span>
               )}
             </div>
-            <div className="text-[11px] text-black mt-0.5 text-center">
+            <div className="text-[11px] text-black mt-1 text-center font-serif">
               (stanowisko)
             </div>
           </div>
@@ -104,33 +88,33 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
         <div className="w-[48%] text-center">
           <div className="flex items-end justify-center gap-1.5 pb-0.5">
             {/* Miejscowość */}
-            <span className="inline-block border-b border-dotted border-black px-2 font-sans font-medium text-[13.5px] min-w-[120px] text-center">
+            <span className="inline-block border-b border-dotted border-black px-2 font-sans font-medium text-[13.5px] min-w-[125px] text-center">
               {data.miejscowosc || 'Ruda Śląska'}
             </span>
             <span className="text-[13px] whitespace-nowrap">dnia</span>
             {/* Data (dzień i miesiąc) */}
-            <span className="inline-block border-b border-dotted border-black px-1.5 font-sans font-medium text-[13.5px] min-w-[70px] text-center">
+            <span className="inline-block border-b border-dotted border-black px-1.5 font-sans font-medium text-[13.5px] min-w-[65px] text-center">
               {dayMonthVal || '24.10'}
             </span>
-            {/* Rok */}
-            <span className="whitespace-nowrap font-sans font-medium text-[13.5px]">
-              {data.rokWniosku || '2025'} r.
+            {/* Rok z głównego pola "Rok oświadczenia" */}
+            <span className="whitespace-nowrap font-sans font-semibold text-[13.5px]">
+              {rok} r.
             </span>
           </div>
-          <div className="text-[11px] text-black mt-0.5 text-center">
+          <div className="text-[11px] text-black mt-1 text-center font-serif">
             (miejscowość, data)
           </div>
         </div>
       </div>
 
-      {/* TYTUŁ DOKUMENTU */}
+      {/* TYTUŁ DOKUMENTU - z rokiem sterowanym z głównego pola */}
       <div className="text-center my-6 space-y-1">
         <h1 className="text-lg sm:text-[19px] font-bold tracking-[0.25em] uppercase">
           O Ś W I A D C Z E N I E
         </h1>
         <h2 className="text-[14px] sm:text-[15px] font-semibold">
           o dochodach rodziny pracownika występującego z wnioskiem
-          <br />o otrzymanie pomocy z ZFŚS w {data.rokWniosku || '2025'} roku
+          <br />o otrzymanie pomocy z ZFŚS w {rok} roku
         </h2>
         <h3 className="text-[13px] italic pt-1">
           za okres trzech miesięcy poprzedzających złożenie wniosku o dofinansowanie
@@ -143,11 +127,11 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           Uprzedzony o odpowiedzialności karnej za składanie fałszywych zeznań, oświadczam że:
         </p>
 
-        {/* Fragment okresu miesięcy */}
+        {/* Fragment okresu miesięcy - dynamicznie zaktualizowany rokiem oświadczenia: 09 – 11.<rok>..r */}
         <p className="indent-6 leading-relaxed">
           w okresie trzech miesięcy poprzedzających złożenie wniosku, tj.{' '}
-          <span className="font-semibold px-1 py-0.2 bg-amber-50/70 print:bg-transparent font-sans">
-            …{data.okresMiesiecy || '09 – 11.2025'}..r
+          <span className="font-semibold font-sans">
+            …09 – 11.{rok}..r
           </span>{' '}
           ( wypłacone w m-cach )
         </p>
@@ -187,7 +171,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           </div>
 
           {/* Słownie pod kropkami */}
-          <div className="w-full border-b border-dotted border-black min-h-[24px] px-1 font-sans text-[12.5px] italic text-slate-900 leading-normal">
+          <div className="w-full border-b border-dotted border-black min-h-[24px] px-1 font-sans text-[12.5px] italic text-black leading-normal">
             {data.dochodWspolneSlownie ||
               '………………………………………………………………………………………………………………………'}
           </div>
@@ -195,7 +179,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
         </div>
 
         {/* Adnotacja w nawiasie */}
-        <p className="text-[12px] italic text-slate-700 print:text-black">
+        <p className="text-[12px] italic text-slate-800 print:text-black">
           (W oświadczeniu należy uwzględnić wszystkie dochody , bez względu na źródło ich pochodzenia).
         </p>
 
@@ -246,7 +230,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
                 <span className="text-transparent select-none">.</span>
               )}
             </div>
-            <div className="text-[11px] text-black mt-1 text-center">
+            <div className="text-[11px] text-black mt-1 text-center font-serif">
               (podpis pracownika)
             </div>
           </div>
@@ -260,29 +244,26 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           </p>
         </div>
 
-        {/* WYPEŁNIA PRACODAWCA (ramka na dole dokumentu) */}
+        {/* WYPEŁNIA PRACODAWCA - wszystkie pola całkowicie puste (same linie kropkowane wg żądania) */}
         <div className="mt-4 border border-black p-3 text-[12px] space-y-2">
           <div className="font-bold text-[12.5px]">Wypełnia pracodawca:</div>
           <div className="flex flex-wrap items-baseline gap-1 leading-normal">
             <span>Średni dochód brutto przypadający na jedną osobę w rodzinie w okresie</span>
-            <span className="inline-block border-b border-dotted border-black px-2 min-w-[120px] text-center font-sans font-semibold">
-              {data.okresMiesiecy || '………………………………'}
+            <span className="inline-block border-b border-dotted border-black px-2 flex-1 min-w-[120px] text-center font-sans">
+              &nbsp;
             </span>
           </div>
           <div className="flex flex-wrap items-baseline gap-1 leading-normal">
             <span>wyniósł</span>
-            <span className="inline-block border-b border-dotted border-black px-2 min-w-[160px] text-center font-sans font-bold">
-              {showEmployerCalculations && sredniNaOsobe
-                ? `${sredniNaOsobe}`
-                : '.............................................'}
+            <span className="inline-block border-b border-dotted border-black px-2 flex-1 min-w-[160px] text-center font-sans">
+              &nbsp;
             </span>
             <span>zł.</span>
           </div>
           <div className="flex flex-wrap items-baseline gap-1 leading-normal pt-1">
             <span>Wysokość dofinansowania</span>
-            <span className="inline-block border-b border-dotted border-black px-2 flex-1 min-w-[200px] text-center font-sans font-bold">
-              {data.wysokoscDofinansowaniaPracodawca ||
-                '..................................'}
+            <span className="inline-block border-b border-dotted border-black px-2 flex-1 min-w-[200px] text-center font-sans">
+              &nbsp;
             </span>
           </div>
         </div>

@@ -31,15 +31,15 @@ export const HouseholdPersonsSelect: React.FC<HouseholdPersonsSelectProps> = ({
   return (
     <div className={`relative ${className}`}>
       <div className="relative flex items-center">
-        <Users className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
+        <Users className="absolute left-3.5 w-4 h-4 text-amber-400 pointer-events-none" />
         <select
           id={id}
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value, 10))}
-          className="w-full pl-9 pr-8 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-xs cursor-pointer"
+          className="w-full pl-10 pr-8 py-2.5 text-sm bg-[#09101d] border border-[#1e2d4a] rounded-xl text-slate-100 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500/50 transition-all shadow-inner cursor-pointer"
         >
           {options.map((opt) => (
-            <option key={opt.num} value={opt.num}>
+            <option key={opt.num} value={opt.num} className="bg-[#0b1424] text-slate-100 font-medium">
               {opt.label}
             </option>
           ))}

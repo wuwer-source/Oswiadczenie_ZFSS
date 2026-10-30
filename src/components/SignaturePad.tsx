@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { PenTool, RotateCcw, Type, Check, Eraser } from 'lucide-react';
+import { PenTool, Eraser } from 'lucide-react';
 
 interface SignaturePadProps {
   signatureData: string; // Base64 dataURL or empty
@@ -25,7 +25,6 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // High DPI canvas setup
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     canvas.width = rect.width * dpr;
@@ -34,10 +33,9 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
 
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#1e3a8a'; // dark navy ink
+    ctx.strokeStyle = '#0f172a'; // dark ink for print
     ctx.lineWidth = 2.5;
 
-    // If existing signatureData, load it
     if (signatureData && signatureData.startsWith('data:image')) {
       const img = new Image();
       img.onload = () => {
@@ -120,8 +118,8 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
 
     const rect = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'italic 28px "Caveat", "Brush Script MT", "Segoe Script", cursive';
-    ctx.fillStyle = '#1e3a8a';
+    ctx.font = 'italic 26px "Caveat", "Brush Script MT", "Segoe Script", cursive';
+    ctx.fillStyle = '#0f172a';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(typedName, rect.width / 2, rect.height / 2);
@@ -132,18 +130,18 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
   return (
     <div className={`space-y-2 ${className}`}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
-          <PenTool className="w-4 h-4 text-blue-600" />
-          <span>Podpis pracownika (cyfrowy lub odręczny)</span>
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-200">
+          <PenTool className="w-4 h-4 text-amber-400" />
+          <span>Podpis pracownika (cyfrowy lub kaligraficzny)</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setMode('draw')}
-            className={`px-2 py-1 text-xs rounded font-medium transition-colors ${
+            className={`px-2.5 py-1 text-xs rounded-lg font-bold transition-all border ${
               mode === 'draw'
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                : 'text-slate-500 hover:bg-slate-100'
+                ? 'bg-amber-400/20 text-amber-300 border-amber-400/40 shadow-xs'
+                : 'text-slate-400 border-transparent hover:bg-[#132038]'
             }`}
           >
             Rysuj
@@ -154,10 +152,10 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
               setMode('type');
               generateSignatureFromType();
             }}
-            className={`px-2 py-1 text-xs rounded font-medium transition-colors ${
+            className={`px-2.5 py-1 text-xs rounded-lg font-bold transition-all border ${
               mode === 'type'
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                : 'text-slate-500 hover:bg-slate-100'
+                ? 'bg-amber-400/20 text-amber-300 border-amber-400/40 shadow-xs'
+                : 'text-slate-400 border-transparent hover:bg-[#132038]'
             }`}
           >
             Styl pisma
@@ -165,15 +163,15 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           <button
             type="button"
             onClick={clearCanvas}
-            className="p-1 text-xs text-rose-600 hover:bg-rose-50 rounded"
+            className="p-1 text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-colors"
             title="Wyczyść podpis"
           >
-            <Eraser className="w-3.5 h-3.5" />
+            <Eraser className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <div className="relative border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50/50 dark:bg-slate-900/50 overflow-hidden">
+      <div className="relative border border-[#1e2d4a] rounded-xl bg-white/95 overflow-hidden shadow-inner">
         <canvas
           ref={canvasRef}
           onMouseDown={startDrawing}
@@ -183,14 +181,14 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
           onTouchStart={startDrawing}
           onTouchMove={draw}
           onTouchEnd={stopDrawing}
-          className="w-full h-28 cursor-crosshair touch-none"
+          className="w-full h-24 cursor-crosshair touch-none"
         />
 
         {!hasDrawn && (
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-slate-400">
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-xs text-slate-400 font-medium">
             {mode === 'draw'
               ? 'Złóż podpis tutaj za pomocą myszy lub palca'
-              : 'Kliknij "Styl pisma" aby wygenerować na podstawie imienia i nazwiska'}
+              : 'Kliknij "Styl pisma" aby wygenerować podpis z imienia i nazwiska'}
           </div>
         )}
       </div>
