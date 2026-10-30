@@ -52,12 +52,15 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
     <div
       id="printable-document"
       className="a4-document bg-white text-black p-8 sm:p-11 shadow-2xl mx-auto rounded-none border border-slate-300 print:border-none print:shadow-none print:p-0 print:m-0 w-full max-w-[800px] font-serif text-[12.8px] leading-[1.55] select-text box-border"
-      style={{ fontFamily: '"Times New Roman", Times, Georgia, serif' }}
+      style={{
+        fontFamily: '"Times New Roman", Times, Georgia, serif',
+        paddingTop: '15mm',
+      }}
     >
-      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data (po prawej) & Imię, nazwisko, stanowisko (po lewej z wyraźnie niższym odstępem) */}
-      <div className="flex justify-between items-start gap-4 mb-4 pt-1">
-        {/* Lewa strona: Imię i nazwisko oraz stanowisko (wyraźnie obniżone względem prawej strony) */}
-        <div className="w-[48%] space-y-4 pt-16 sm:pt-20">
+      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data (po prawej 1.5 cm od góry) & Imię, nazwisko, stanowisko (po lewej dokładnie 1.5 cm niżej) */}
+      <div className="flex justify-between items-start gap-4 mb-4">
+        {/* Lewa strona: Imię i nazwisko oraz stanowisko (obniżone dokładnie o 1.5 cm = 15mm) */}
+        <div className="w-[48%] space-y-4 pt-[15mm]">
           {/* Imię i nazwisko */}
           <div className="text-center">
             <div className="min-h-[24px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-semibold text-[13.5px]">
@@ -227,7 +230,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
                 <img
                   src={data.podpisImage}
                   alt="Podpis pracownika"
-                  className="max-h-11 object-contain"
+                  className="max-h-9 max-w-[150px] object-contain mx-auto"
                 />
               ) : (
                 <span className="text-transparent select-none">.</span>
