@@ -115,7 +115,7 @@ export function exportToWordDoc(data: FormDataState) {
       </p>
 
       <p style="text-indent: 20pt; text-align: justify;">
-        w okresie trzech miesięcy poprzedzających złożenie wniosku, tj. <b>…09 – 11.${rok}..r</b> ( wypłacone w m-cach )
+        w okresie trzech miesięcy poprzedzających złożenie wniosku, tj. <b>09 – 11.${rok} r.</b> ( wypłacone w m-cach )
       </p>
 
       <p style="margin-top: 6pt;">

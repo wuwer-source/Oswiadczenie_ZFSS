@@ -8,21 +8,32 @@
   }
 }
 
-/* Reguły drukowania na A4 dla oficjalnego dokumentu */
+/* Reguły drukowania na A4 dla oficjalnego dokumentu - czysta 1 strona A4 bez nagłówków i stopek przeglądarki */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 12mm 15mm;
+    margin: 0mm !important; /* Usuwa automatyczną datę, tytuł i URL w stopce z przeglądarki */
   }
 
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    padding: 0 !important;
+  *, *::before, *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  html, body {
     margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Ukryj wszystkie kontrolki interfejsu webowego podczas druku / eksportu do PDF */
+  /* Całkowite ukrycie wszystkich elementów interfejsu aplikacji */
   .no-print,
   nav,
   header,
@@ -33,14 +44,38 @@
     display: none !important;
   }
 
-  /* Oficjalny dokument A4 */
+  /* Reset wszelkich kontenerów nadrzędnych */
+  #root,
+  main,
+  section,
+  div {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+
+  /* Oficjalny dokument A4 - precyzyjne dopasowanie do 1 strony */
   #printable-document {
     display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    padding: 12mm 15mm 10mm 15mm !important;
+    box-sizing: border-box !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
   }
 }

@@ -329,26 +329,21 @@ export default function App() {
             activeTab === 'preview' ? 'hidden xl:block' : 'block'
           }`}
         >
-          {/* KARTA GŁÓWNA: Rok oświadczenia (ZMIENIA WSZĘDZIE ROK) + informacja o wyliczanym okresie */}
-          <div className="bg-[#0b1424] rounded-2xl p-4 sm:p-5 border border-[#1e2d4a] shadow-xl space-y-4">
-            <div className="flex items-center gap-3 pb-3 border-b border-[#17253d]">
+          {/* KARTA GŁÓWNA: Rok oświadczenia */}
+          <div className="bg-[#0b1424] rounded-2xl p-4 sm:p-5 border border-[#1e2d4a] shadow-xl space-y-3">
+            <div className="flex items-center gap-3 pb-2 border-b border-[#17253d]">
               <div className="w-8 h-8 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
                 <Calendar className="w-4 h-4" />
               </div>
-              <div>
-                <h2 className="font-bold text-sm text-white">
-                  Rok oświadczenia (steruje całym dokumentem)
-                </h2>
-                <p className="text-xs text-slate-400">
-                  Wpisany tutaj rok automatycznie aktualizuje wszystkie miejsca w oświadczeniu
-                </p>
-              </div>
+              <h2 className="font-bold text-sm text-white">
+                Rok oświadczenia
+              </h2>
             </div>
 
             {/* Pole ROK OŚWIADCZENIA */}
             <div>
               <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Rok oświadczenia (np. 2025, 2026)
+                Rok oświadczenia
               </label>
               <div className="relative">
                 <input
@@ -356,22 +351,12 @@ export default function App() {
                   value={formData.rokWniosku}
                   onChange={(e) => handleRokChange(e.target.value)}
                   placeholder="2025"
-                  className="w-full pl-3.5 pr-20 py-2.5 text-base bg-[#09101d] border border-amber-500/40 rounded-xl text-amber-300 font-mono font-black focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all shadow-inner"
+                  className="w-full pl-3.5 pr-16 py-2 text-base bg-[#09101d] border border-amber-500/40 rounded-xl text-amber-300 font-mono font-black focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all shadow-inner"
                 />
                 <span className="absolute right-3.5 top-2.5 text-xs font-bold text-amber-400/70">
                   rok
                 </span>
               </div>
-            </div>
-
-            {/* Pokaż wynikowy zapis okresu: „w okresie trzech miesięcy poprzedzających złożenie wniosku, tj. 09 – 11.2026..r (wypłacone w m-cach)” */}
-            <div className="p-3 bg-[#070d18] rounded-xl border border-[#17253d] space-y-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                Zapis w treści oświadczenia:
-              </span>
-              <p className="text-xs font-semibold text-amber-300 font-mono">
-                w okresie trzech miesięcy poprzedzających złożenie wniosku, tj. 09 – 11.{formData.rokWniosku || '2025'}..r (wypłacone w m-cach)
-              </p>
             </div>
           </div>
 
@@ -402,10 +387,10 @@ export default function App() {
               />
             </div>
 
-            {/* Data (bez wyboru roku w kalendarzu, rok sterowany globalnie) */}
+            {/* Data (prosta, czysta etykieta) */}
             <div>
               <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Data wniosku (kalendarz z odznaczonym weekendem So/Nd)
+                Data wniosku
               </label>
               <DatePickerWithWeekends
                 value={formData.dataWniosku}
@@ -655,7 +640,7 @@ export default function App() {
           </div>
 
           {/* Kontener arkusza A4 - biały arkusz jak w oryginale */}
-          <div className="w-full bg-[#0b1424] p-2 sm:p-6 rounded-2xl border border-[#17253d] flex justify-center shadow-2xl overflow-x-auto">
+          <div className="w-full bg-[#0b1424] p-2 sm:p-6 rounded-2xl border border-[#17253d] flex justify-center shadow-2xl overflow-x-auto print:bg-white print:border-none print:p-0 print:m-0 print:shadow-none">
             <OfficialDocumentView data={formData} />
           </div>
         </section>
