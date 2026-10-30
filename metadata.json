@@ -1,0 +1,6 @@
+{
+  "name": "Formularz ZFŚS - WUWER Sp. z o.o.",
+  "description": "Interaktywny generator i formularz oświadczenia o dochodach ZFŚS w WUWER Sp. z o.o. z automatycznym przeliczaniem kwot słownie, kalendarzem i eksportem do PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
