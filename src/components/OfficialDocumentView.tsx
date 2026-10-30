@@ -7,7 +7,10 @@ export interface FormDataState {
   rokWniosku: string; // "2025" - master year that controls everywhere
   imieNazwisko: string;
   stanowisko: string;
-  dochodWuwer: string; // "14250,00"
+  dochodWuwerM1: string; // miesiąc 09
+  dochodWuwerM2: string; // miesiąc 10
+  dochodWuwerM3: string; // miesiąc 11
+  dochodWuwer: string; // suma 3 miesięcy
   inneZrodlaOpis: string; // np. "zlecenie", "brak"
   dochodInne: string; // "0,00"
   dochodWspolne: string; // "33 825,45"
@@ -51,10 +54,10 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
       className="a4-document bg-white text-black p-8 sm:p-11 shadow-2xl mx-auto rounded-none border border-slate-300 print:border-none print:shadow-none print:p-0 print:m-0 w-full max-w-[800px] font-serif text-[12.8px] leading-[1.55] select-text box-border"
       style={{ fontFamily: '"Times New Roman", Times, Georgia, serif' }}
     >
-      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data (po prawej) & Imię, nazwisko, stanowisko (po lewej z ładnym, niższym odstępem) */}
+      {/* NAGŁÓWEK DOKUMENTU: Miejscowość, data (po prawej) & Imię, nazwisko, stanowisko (po lewej z wyraźnie niższym odstępem) */}
       <div className="flex justify-between items-start gap-4 mb-4 pt-1">
-        {/* Lewa strona: Imię i nazwisko (obniżone jeszcze niżej wg prośby) + Stanowisko */}
-        <div className="w-[48%] space-y-3.5 pt-9 sm:pt-11">
+        {/* Lewa strona: Imię i nazwisko oraz stanowisko (wyraźnie obniżone względem prawej strony) */}
+        <div className="w-[48%] space-y-4 pt-16 sm:pt-20">
           {/* Imię i nazwisko */}
           <div className="text-center">
             <div className="min-h-[24px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-semibold text-[13.5px]">
@@ -70,7 +73,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           </div>
 
           {/* Stanowisko */}
-          <div className="text-center pt-0.5">
+          <div className="text-center pt-1">
             <div className="min-h-[22px] border-b border-dotted border-black flex items-end justify-center px-2 pb-0.5 font-sans font-medium text-[12.5px]">
               {data.stanowisko ? (
                 <span className="text-black">{data.stanowisko}</span>
@@ -84,7 +87,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           </div>
         </div>
 
-        {/* Prawa strona: Miejscowość i data - wycentrowane pod kropkami */}
+        {/* Prawa strona: Miejscowość i data - wycentrowane pod kropkami na samej górze */}
         <div className="w-[48%] text-center">
           <div className="flex items-end justify-center gap-1.5 pb-0.5">
             {/* Miejscowość */}
@@ -127,7 +130,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           Uprzedzony o odpowiedzialności karnej za składanie fałszywych zeznań, oświadczam że:
         </p>
 
-        {/* Zmiana formatu zgodnie z prośbą: bez 3 kropek przed data, z pojedynczą spacją i r. po roku */}
+        {/* Okres miesięcy: 09 – 11.[ROK] r. ( wypłacone w m-cach ) */}
         <p className="indent-6 leading-relaxed">
           w okresie trzech miesięcy poprzedzających złożenie wniosku, tj.{' '}
           <span className="font-semibold font-sans">
@@ -136,7 +139,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
           ( wypłacone w m-cach )
         </p>
 
-        {/* Punkt 1 */}
+        {/* Punkt 1 - suma 3 miesięcy z WUWER Sp. z o.o. */}
         <div className="flex flex-wrap items-baseline gap-1 leading-relaxed">
           <span>1. Moje dochody brutto z tytułu zatrudnienia w WUWER Sp. z o.o. wyniosły</span>
           <span className="inline-block min-w-[160px] flex-1 border-b border-dotted border-black text-center font-sans font-bold px-2">

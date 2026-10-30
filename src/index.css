@@ -15,25 +15,17 @@
     margin: 0mm !important; /* Usuwa automatyczną datę, tytuł i URL w stopce z przeglądarki */
   }
 
-  *, *::before, *::after {
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
   html, body {
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
     background-color: #ffffff !important;
     color: #000000 !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    overflow: hidden !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Całkowite ukrycie wszystkich elementów interfejsu aplikacji */
+  /* Całkowite ukrycie elementów interfejsu */
   .no-print,
   nav,
   header,
@@ -44,38 +36,44 @@
     display: none !important;
   }
 
-  /* Reset wszelkich kontenerów nadrzędnych */
+  /* Upewnienie się, że kontenery nadrzędne nie ukrywają dokumentu */
   #root,
   main,
   section,
-  div {
-    background: transparent !important;
-    background-color: transparent !important;
-    border-color: transparent !important;
+  div:has(> #printable-document) {
+    display: block !important;
+    visibility: visible !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
   }
 
-  /* Oficjalny dokument A4 - precyzyjne dopasowanie do 1 strony */
+  /* Oficjalny dokument A4 - precyzyjnie widoczny i dopasowany do 1 strony */
   #printable-document {
     display: block !important;
     visibility: visible !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
     width: 210mm !important;
-    min-width: 210mm !important;
     max-width: 210mm !important;
-    height: 297mm !important;
-    max-height: 297mm !important;
-    overflow: hidden !important;
+    min-height: 297mm !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+    padding: 12mm 15mm 10mm 15mm !important;
     background: #ffffff !important;
     background-color: #ffffff !important;
     color: #000000 !important;
     box-shadow: none !important;
     border: none !important;
-    padding: 12mm 15mm 10mm 15mm !important;
-    box-sizing: border-box !important;
     page-break-before: avoid !important;
     page-break-after: avoid !important;
     page-break-inside: avoid !important;
+  }
+
+  #printable-document * {
+    visibility: visible !important;
+    color: #000000 !important;
   }
 }

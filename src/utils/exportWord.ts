@@ -81,13 +81,13 @@ export function exportToWordDoc(data: FormDataState) {
     <body>
       <table>
         <tr>
-          <td style="width: 50%; vertical-align: top; padding-top: 25pt;">
-            <div style="border-bottom: 1px dotted #000; text-align: center; font-weight: bold; font-family: Arial, sans-serif; font-size: 10.5pt; min-height: 16pt;">
+          <td style="width: 50%; vertical-align: top; padding-top: 60pt;">
+            <div style="border-bottom: 1px dotted #000; text-align: center; font-weight: bold; font-family: Arial, sans-serif; font-size: 10.5pt; min-height: 18pt;">
               ${data.imieNazwisko || '&nbsp;'}
             </div>
             <div class="small">(imię i nazwisko)</div>
             <br>
-            <div style="border-bottom: 1px dotted #000; text-align: center; font-family: Arial, sans-serif; font-size: 9.5pt; min-height: 16pt;">
+            <div style="border-bottom: 1px dotted #000; text-align: center; font-family: Arial, sans-serif; font-size: 9.5pt; min-height: 18pt;">
               ${data.stanowisko || '&nbsp;'}
             </div>
             <div class="small">(stanowisko)</div>
