@@ -7,7 +7,7 @@ on:
       - master
   workflow_dispatch:
 
-# Nadanie uprawnień GITHUB_TOKEN do wdrażania na GitHub Pages
+# Nadanie uprawnień do wdrażania na GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -15,14 +15,13 @@ permissions:
 
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # Zadanie 1: Kompilacja projektu
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -38,14 +37,19 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
 
+  # Zadanie 2: Wdrożenie na GitHub Pages
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
