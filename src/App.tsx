@@ -724,7 +724,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span className="text-xs font-bold text-slate-300">
-                Podgląd na żywo oryginalnego druku A4 (zawsze biały)
+                Podgląd na żywo oryginalnego druku A4
               </span>
             </div>
             <button

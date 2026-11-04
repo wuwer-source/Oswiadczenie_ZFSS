@@ -19,6 +19,10 @@ export function exportToWordDoc(data: FormDataState) {
     }
   }
 
+  // Obliczenie wysokości odstępu dociskającego podpis i ramkę na sam dół strony A4 (margines dolny 1.5 cm)
+  const slownieLength = (data.dochodWspolneSlownie || '').length;
+  const spacerHeight = slownieLength > 65 ? '4.1cm' : '4.6cm';
+
   const content = `
     <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
     <head>
@@ -39,7 +43,6 @@ export function exportToWordDoc(data: FormDataState) {
           margin: 1.5cm 1.6cm 1.5cm 1.6cm; /* Margines góra: 1.5 cm, dół: 1.5 cm dokładnie taki sam */
           mso-header-margin: 0.5cm;
           mso-footer-margin: 0.5cm;
-          mso-footer: f1;
           mso-paper-source: 0;
         }
         div.Section1 {
@@ -56,6 +59,12 @@ export function exportToWordDoc(data: FormDataState) {
           background: #ffffff !important;
           margin: 0;
           padding: 0;
+        }
+        p {
+          margin: 0;
+          padding: 0;
+          margin-bottom: 0pt;
+          mso-pagination: widow-orphan;
         }
         table {
           width: 100%;
@@ -248,8 +257,8 @@ export function exportToWordDoc(data: FormDataState) {
           Wyrażam zgodę na przetwarzanie powyższych informacji wyłącznie w celu zawartym w treści oświadczenia.
         </p>
 
-        <!-- ODSTĘP PUSZCZAJĄCY PODPIS, POUCZENIE I RAMKĘ PRACODAWCY NA SAM DÓŁ (DÓŁ = 1.5 cm OD BRZEGU) -->
-        <div style="height: 0.9cm; line-height: 0.9cm; font-size: 1pt; mso-line-height-rule: exactly;">&nbsp;</div>
+        <!-- ODSTĘP PUSZCZAJĄCY PODPIS, POUCZENIE I RAMKĘ PRACODAWCY SZTYWNO NA SAM DÓŁ STRONY A4 (DÓŁ = 1.5 CM OD BRZEGU) -->
+        <div style="height: ${spacerHeight}; line-height: ${spacerHeight}; font-size: 1pt; mso-line-height-rule: exactly;">&nbsp;</div>
 
         <!-- PODPIS PRACOWNIKA: UMIESZCZONY SZTYWNO BEZPOŚREDNIO NAD POUCZENIEM -->
         <table style="margin-top: 0; width: 100%; border-collapse: collapse; background-color: #ffffff;">
@@ -294,8 +303,8 @@ export function exportToWordDoc(data: FormDataState) {
           </table>
         </div>
 
-        <!-- NUMER STRONY 1/1 W PRAWYM DOLNYM ROGU -->
-        <table style="width: 100%; border-collapse: collapse; margin-top: 3pt;">
+        <!-- NUMER STRONY 1/1 W PRAWYM DOLNYM ROGU (DOKŁADNIE 1 RAZ W CAŁYM DOKUMENCIE, IDENTYCZNIE JAK W PDF) -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 4pt;">
           <tr>
             <td style="text-align: right; font-size: 8.5pt; font-family: Arial, sans-serif; color: #000000; padding: 0;">
               1/1
@@ -303,13 +312,6 @@ export function exportToWordDoc(data: FormDataState) {
           </tr>
         </table>
 
-      </div>
-
-      <!-- Word Footer dla widoku wydruku w Wordzie -->
-      <div style="mso-element:footer" id="f1">
-        <p class="MsoFooter" style="text-align: right; font-size: 8.5pt; font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000000;">
-          1/1
-        </p>
       </div>
     </body>
     </html>
