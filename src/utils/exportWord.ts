@@ -36,9 +36,10 @@ export function exportToWordDoc(data: FormDataState) {
       <style>
         @page Section1 {
           size: 21.0cm 29.7cm;
-          margin: 1.5cm 1.6cm 1.5cm 1.6cm; /* Szerokie, naturalne marginesy A4 */
+          margin: 1.5cm 1.6cm 1.5cm 1.6cm; /* Margines góra: 1.5 cm, dół: 1.5 cm dokładnie taki sam */
           mso-header-margin: 0.5cm;
           mso-footer-margin: 0.5cm;
+          mso-footer: f1;
           mso-paper-source: 0;
         }
         div.Section1 {
@@ -98,7 +99,7 @@ export function exportToWordDoc(data: FormDataState) {
         .box {
           border: 1px solid #000000;
           padding: 6pt 8pt;
-          margin-top: 12pt;
+          margin-top: 10pt;
           font-size: 9pt;
           background-color: #ffffff !important;
           color: #000000;
@@ -132,7 +133,7 @@ export function exportToWordDoc(data: FormDataState) {
 
             <td style="width: 4%;"></td>
 
-            <!-- Prawa kolumna: Miejscowość i data rozciągnięta elegancko pod kropkami -->
+            <!-- Prawa kolumna: Miejscowość i data rozciągnięta elegancko pod kropkami (1.5 cm od góry) -->
             <td style="width: 48%; vertical-align: top; text-align: center; background-color: #ffffff;">
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
@@ -243,12 +244,15 @@ export function exportToWordDoc(data: FormDataState) {
           </tr>
         </table>
 
-        <p style="margin-top: 8pt; margin-bottom: 4pt; text-align: justify; color: #000000;">
+        <p style="margin-top: 7pt; margin-bottom: 2pt; text-align: justify; color: #000000;">
           Wyrażam zgodę na przetwarzanie powyższych informacji wyłącznie w celu zawartym w treści oświadczenia.
         </p>
 
-        <!-- PODPIS PRACOWNIKA: Rozciągnięta linia, zgrabny podpis -->
-        <table style="margin-top: 6pt; width: 100%; border-collapse: collapse; background-color: #ffffff;">
+        <!-- ODSTĘP PUSZCZAJĄCY PODPIS, POUCZENIE I RAMKĘ PRACODAWCY NA SAM DÓŁ (DÓŁ = 1.5 cm OD BRZEGU) -->
+        <div style="height: 0.9cm; line-height: 0.9cm; font-size: 1pt; mso-line-height-rule: exactly;">&nbsp;</div>
+
+        <!-- PODPIS PRACOWNIKA: UMIESZCZONY SZTYWNO BEZPOŚREDNIO NAD POUCZENIEM -->
+        <table style="margin-top: 0; width: 100%; border-collapse: collapse; background-color: #ffffff;">
           <tr>
             <td style="width: 52%; background-color: #ffffff;"></td>
             <td style="width: 48%; text-align: center; background-color: #ffffff;">
@@ -264,13 +268,13 @@ export function exportToWordDoc(data: FormDataState) {
           </tr>
         </table>
 
-        <!-- POUCZENIE -->
-        <div style="margin-top: 8pt; font-size: 8pt; color: #000000; line-height: 1.25;">
+        <!-- POUCZENIE: BEZPOŚREDNIO POD PODPISEM, NA SAMYM DOLE -->
+        <div style="margin-top: 6pt; font-size: 8pt; color: #000000; line-height: 1.25;">
           <b><u>Pouczenie:</u></b><br>
           W przypadku złożenia niezgodnego z prawdą oświadczenia o sytuacji materialnej i rodzinnej albo w przypadku wykorzystania świadczenia niezgodnie z jego przeznaczeniem, uprawniony zostaje wyłączony z prawa do korzystania ze środków Funduszu na 2 lata.
         </div>
 
-        <!-- RAMKA PRACODAWCY: Rozciągnięta na całą szerokość -->
+        <!-- RAMKA PRACODAWCY: NA SAMYM DOLE (MARGINES DOLNY 1.5 CM) -->
         <div class="box">
           <b>Wypełnia pracodawca:</b><br>
           <table style="width: 100%; border-collapse: collapse; margin-top: 3pt;">
@@ -290,6 +294,22 @@ export function exportToWordDoc(data: FormDataState) {
           </table>
         </div>
 
+        <!-- NUMER STRONY 1/1 W PRAWYM DOLNYM ROGU -->
+        <table style="width: 100%; border-collapse: collapse; margin-top: 3pt;">
+          <tr>
+            <td style="text-align: right; font-size: 8.5pt; font-family: Arial, sans-serif; color: #000000; padding: 0;">
+              1/1
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <!-- Word Footer dla widoku wydruku w Wordzie -->
+      <div style="mso-element:footer" id="f1">
+        <p class="MsoFooter" style="text-align: right; font-size: 8.5pt; font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000000;">
+          1/1
+        </p>
       </div>
     </body>
     </html>

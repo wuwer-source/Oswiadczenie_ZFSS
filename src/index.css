@@ -52,16 +52,21 @@
     width: 100% !important;
   }
 
-  /* Oficjalny dokument A4 - precyzyjnie widoczny i dopasowany do 1 strony */
+  /* Oficjalny dokument A4 - precyzyjnie widoczny, rozciągnięty w pionie z marginesem 1.5 cm u góry i na dole */
   #printable-document {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
     visibility: visible !important;
     width: 210mm !important;
     max-width: 210mm !important;
     min-height: 297mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
     box-sizing: border-box !important;
     margin: 0 auto !important;
-    padding: 15mm 18mm 12mm 18mm !important;
+    padding: 15mm 18mm 15mm 18mm !important; /* Margines góra: 1.5 cm, dół: 1.5 cm */
     background: #ffffff !important;
     background-color: #ffffff !important;
     color: #000000 !important;
